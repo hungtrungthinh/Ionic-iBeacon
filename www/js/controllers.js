@@ -1,33 +1,71 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {
-  $scope.isScanning - false;
-  $scope.items = [
-    {
-      type: 'Gimbal Beacon Series 21',
-      uuid: '58SE71079-4CDB-44F8-8F11-278A1246B308',
-      rssi: '-85'
-    }
-  ];
+.controller('MonitoringCtrl', function($scope) {
+  $scope.isMonitoring = false;
+  $scope.mode = 'uuid';
+  $scope.device = {
+    uuid: '',
+    identifier: '',
+    major: 65535,
+    minor: 65535
+  }
+  $scope.messages = [];
+  $scope.beaconRegion = null;
 
-  var startScanning = function() {
-    $scope.isScanning = true;
+  var delegate = new cordova.plugins.locationManager.Delegate();
+  delegate.didDetermineStateForRegion = function (pluginResult) {
+      messages.push('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+      cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
+          + JSON.stringify(pluginResult));
+  };
+  delegate.didStartMonitoringForRegion = function (pluginResult) {
+      console.log('didStartMonitoringForRegion:', pluginResult);
+
+      messages.push('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+  };
+  delegate.didRangeBeaconsInRegion = function (pluginResult) {
+      messages.push('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+  };  
+
+  var startMonitoring = function() {
+    if (mode == 'uuid') {
+      $scope.isMonitoring = true;
+
+      $scope.beaconRegion = new cordova.plugins.locationManager.BeaconRegion(
+        $scope.device.identifier, 
+        $scope.device.uuid, 
+        $scope.device.major, 
+        $scope.device.minor
+      );
+      
+      cordova.plugins.locationManager.startMonitoringForRegion($scope.beaconRegion)
+        .fail(function(e) { console.error(e); })
+        .done();
+
+    }    
   };
 
-  var stopScanning = function() {
-    $scope.isScanning = false;
+  var stopMonitoring = function() {
+    if ($scope.beaconRegion != null) {
+      cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion)
+        .fail(function(e) { console.error(e); })
+        .done();
+      
+      $scope.beaconRegion = null;      
+      $scope.isMonitoring = false;
+    }    
   };
 
    $scope.tappedButton = function() {
-    if ($scope.isScanning) {
-      stopScanning();
+    if ($scope.isMonitoring) {
+      stopMonitoring();
     } else {
-      startScanning();
+      startMonitoring();
     }
   };
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
+.controller('RangingCtrl', function($scope, IBEACON) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -36,17 +74,9 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope) {
+.controller('SettingsCtrl', function($scope) {
   $scope.settings = {
     enableFriends: true
   };

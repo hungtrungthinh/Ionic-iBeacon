@@ -8,16 +8,20 @@
   left: 50%;
   margin-left: -14px;
 }
-.label-uuid {
-  font-size: 14px;
-}
 .item-note {
-  margin-top: -16px;
-}
-.item-note .label-rssi {
+  margin-top: -26px;
   font-size: 14px;
   font-style: italic;
   color: seagreen;
+}
+.item-message {
+  overflow: visible !important;
+  white-space: normal !important;
+  padding-right: 32px;
+}
+.tab-item .icon {
+  height: 28px !important;
+  font-size: 28px !important;
 }
 
 /*
