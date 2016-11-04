@@ -47,4 +47,15 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+.factory('IBEACON', function() {
+  return {
+    scanByArea: function() {
+
+    },
+
+    scanByUUID: function(uuid) {
+      
+    }
+  }
 });

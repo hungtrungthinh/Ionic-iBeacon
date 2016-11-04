@@ -1,1 +1,25 @@
 /* Empty. Add your own CSS if you like */
+
+/*
+* Home page
+*/
+.spinner-center svg {
+  position: absolute;
+  left: 50%;
+  margin-left: -14px;
+}
+.label-uuid {
+  font-size: 14px;
+}
+.item-note {
+  margin-top: -16px;
+}
+.item-note .label-rssi {
+  font-size: 14px;
+  font-style: italic;
+  color: seagreen;
+}
+
+/*
+* Settings page
+*/

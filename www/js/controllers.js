@@ -1,6 +1,31 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope) {
+  $scope.isScanning - false;
+  $scope.items = [
+    {
+      type: 'Gimbal Beacon Series 21',
+      uuid: '58SE71079-4CDB-44F8-8F11-278A1246B308',
+      rssi: '-85'
+    }
+  ];
+
+  var startScanning = function() {
+    $scope.isScanning = true;
+  };
+
+  var stopScanning = function() {
+    $scope.isScanning = false;
+  };
+
+   $scope.tappedButton = function() {
+    if ($scope.isScanning) {
+      stopScanning();
+    } else {
+      startScanning();
+    }
+  };
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
