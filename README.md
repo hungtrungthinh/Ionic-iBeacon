@@ -5,3 +5,4 @@ This is the test project for upgrading <a href="https://github.com/petermetz/cor
 
 # ScreenShots
 <img src="https://github.com/tinydream12/Ionic-iBeacon/blob/master/screenshots/1.png" width="24%"></img>
+<img src="https://github.com/tinydream12/Ionic-iBeacon/blob/master/screenshots/2.png" width="24%"></img>
