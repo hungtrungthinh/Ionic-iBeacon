@@ -8,3 +8,12 @@ This is the test project for upgrading <a href="https://github.com/tinydream12/c
 # ScreenShots
 <img src="https://github.com/tinydream12/Ionic-iBeacon/blob/master/screenshots/1.png" width="24%"></img>
 <img src="https://github.com/tinydream12/Ionic-iBeacon/blob/master/screenshots/2.png" width="24%"></img>
+
+# How to run
+```sh
+$sudo npm install
+$sudo ionic platform add ios
+$sudo cordova plugin add https://github.com/cordova-plugin-ibeacon
+```
+After done, please follow this <a href="https://github.com/tinydream12/cordova-plugin-ibeacon/commit/902a72400e1a0a6d6969ad10776b92de9cedfbc3">instruction</a>
+
