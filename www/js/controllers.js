@@ -2,52 +2,48 @@ angular.module('starter.controllers', [])
 
 .controller('MonitoringCtrl', function($scope) {
   $scope.isMonitoring = false;
-  $scope.mode = 'uuid';  
   $scope.device = {
     uuid: '58E71079-4CDB-44F8-8F11-278A1246B308',
     identifier: 'gimbal-series-21',
     major: 65535,
     minor: 65535
   }
-  $scope.messages = [];
+  $scope.messages= [];
   $scope.beaconRegion = null;
   
   var startMonitoring = function() {
+    $scope.isMonitoring = true;
 
-    if ($scope.mode == 'uuid') {
-      $scope.isMonitoring = true;
+    ionic.Platform.ready(function(){
+      // will execute when device is ready, or immediately if the device is already ready.
+      var delegate = new cordova.plugins.locationManager.Delegate();
+      delegate.didDetermineStateForRegion = function (pluginResult) {
+        alert("didDetermineStateForRegion");
+        console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+        cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
+              + JSON.stringify(pluginResult));
+      };
+      delegate.didStartMonitoringForRegion = function (pluginResult) {
+        console.log('didStartMonitoringForRegion:', pluginResult);
 
-      ionic.Platform.ready(function(){
-        // will execute when device is ready, or immediately if the device is already ready.
-        var delegate = new cordova.plugins.locationManager.Delegate();
-        delegate.didDetermineStateForRegion = function (pluginResult) {
-            console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
-            cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
-                + JSON.stringify(pluginResult));
-        };
-        delegate.didStartMonitoringForRegion = function (pluginResult) {
-            console.log('didStartMonitoringForRegion:', pluginResult);
-
-            console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
-        };
-        delegate.didRangeBeaconsInRegion = function (pluginResult) {
-                           
-            console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
-        };
-                           
-       delegate.didExitRegion = function(pluginResult) {
-                           alert("didExit");
-           pluginResult.region = Regions.fromJson(pluginResult.region);
-       };
-       
-       delegate.didEnterRegion = function(pluginResult) {
-                           alert("didEnter");
-           pluginResult.region = Regions.fromJson(pluginResult.region);
-       };
+        console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+      };
+      delegate.didRangeBeaconsInRegion = function (pluginResult) {
+                          
+        console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+      };
+                          
+      delegate.didExitRegion = function(pluginResult) {
+        alert("didExitRegion");
+        pluginResult.region = Regions.fromJson(pluginResult.region);
+      };
       
-      alert($scope.device.uuid);
-      $scope.beaconRegion = new cordova.plugins.locationManager.BeaconRegion(
-        
+      delegate.didEnterRegion = function(pluginResult) {
+        alert("didEnterRegion");
+        pluginResult.region = Regions.fromJson(pluginResult.region);
+      };
+    
+      $scope.beaconRegion = new cordova.plugins.locationManager.BeaconRegion(        
         $scope.device.identifier,
         $scope.device.uuid,
         $scope.device.major,
@@ -60,21 +56,17 @@ angular.module('starter.controllers', [])
         .fail(function(e) { console.error(e); })
         .done();
 
-      });
-      
-    }  
-  
+    });  
   };
 
   var stopMonitoring = function() {
     if ($scope.beaconRegion != null) {
-      cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion)
+      cordova.plugins.locationManager.stopMonitoringForRegion($scope.beaconRegion)
         .fail(function(e) { console.error(e); })
         .done();
-      
-      $scope.beaconRegion = null;      
-      $scope.isMonitoring = false;
-    }    
+        $scope.beaconRegion = null;
+        $scope.isMonitoring = false;
+    }
   };
 
    $scope.tappedButton = function() {
@@ -95,7 +87,6 @@ angular.module('starter.controllers', [])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
   $scope.isRanging = false;
-  $scope.mode = 'uuid';
   $scope.device = {
     uuid: '58E71079-4CDB-44F8-8F11-278A1246B308',
     identifier: 'gimbal-series-21',
@@ -107,61 +98,55 @@ angular.module('starter.controllers', [])
   $scope.beaconRegion = null;
   
   var startRanging = function() {
+    $scope.isRanging = true;
+    ionic.Platform.ready(function(){        
+      // will execute when device is ready, or immediately if the device is already ready.
+      var delegate = new cordova.plugins.locationManager.Delegate();
 
-    if ($scope.mode == 'uuid') {
-      $scope.isRanging = true;
-      ionic.Platform.ready(function(){        
-        // will execute when device is ready, or immediately if the device is already ready.
-        var delegate = new cordova.plugins.locationManager.Delegate();
+      delegate.didDetermineStateForRegion = function (pluginResult) {
+          //console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
 
-        delegate.didDetermineStateForRegion = function (pluginResult) {
-            //console.log('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+          cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
+              + JSON.stringify(pluginResult));
+      };
 
-            cordova.plugins.locationManager.appendToDeviceLog('[DOM] didDetermineStateForRegion: '
-                + JSON.stringify(pluginResult));
-        };
+      delegate.didStartMonitoringForRegion = function (pluginResult) {
+          //console.log('didStartMonitoringForRegion:', pluginResult);
 
-        delegate.didStartMonitoringForRegion = function (pluginResult) {
-            //console.log('didStartMonitoringForRegion:', pluginResult);
+          //console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
+      };
 
-            //console.log('didStartMonitoringForRegion:' + JSON.stringify(pluginResult));
-        };
+      delegate.didRangeBeaconsInRegion = function (pluginResult) {
+        //console.log(pluginResult.beacons);
+        console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
+      };
 
-        delegate.didRangeBeaconsInRegion = function (pluginResult) {
-          //console.log(pluginResult.beacons);
-          console.log('[DOM] didRangeBeaconsInRegion: ' + JSON.stringify(pluginResult));
-        };
+      $scope.beaconRegion = new cordova.plugins.locationManager.BeaconRegion($scope.device.identifier, $scope.device.uuid, $scope.device.major, $scope.device.minor);
 
-        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion($scope.device.identifier, $scope.device.uuid, $scope.device.major, $scope.device.minor);
+      cordova.plugins.locationManager.setDelegate(delegate);
 
-        cordova.plugins.locationManager.setDelegate(delegate);
+      // required in iOS 8+
+      cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
+      // or cordova.plugins.locationManager.requestAlwaysAuthorization()
 
-        // required in iOS 8+
-        cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
-        // or cordova.plugins.locationManager.requestAlwaysAuthorization()
-
-        cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
-            .fail(function(e) { console.error(e); })
-            .done();
-      });
-      
-    }  
-  
+      cordova.plugins.locationManager.startRangingBeaconsInRegion($scope.beaconRegion)
+          .fail(function(e) { console.error(e); })
+          .done();
+    });
   };
 
   var stopRanging = function() {
     if ($scope.beaconRegion != null) {
-      /*cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion)
+      cordova.plugins.locationManager.stopMonitoringForRegion($scope.beaconRegion)
         .fail(function(e) { console.error(e); })
         .done();
-      */
-      $scope.beaconRegion = null;      
+      $scope.beaconRegion = null;  
       $scope.isRanging = false;
     }    
   };
 
    $scope.tappedButton = function() {
-    if ($scope.isMonitoring) {
+    if ($scope.isRanging) {
       stopRanging();
     } else {
       startRanging();

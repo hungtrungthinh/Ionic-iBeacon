@@ -1,16 +1,7 @@
 <ion-view view-title="Ranging">
   <ion-content class="padding">
     <div>
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Ranging By
-        </div>
-        <select ng-model="mode">
-          <option value="area">Region</option>
-          <option value="uuid">UUID</option>
-        </select>
-      </label>
-      <label ng-show="mode=='uuid'" class="item item-input">
+      <label class="item item-input">
         <input type="text" placeholder="58SE71079-4CDB-44F8-8F11-278A1246B308" ng-model="device.uuid">
       </label>
     </div>
